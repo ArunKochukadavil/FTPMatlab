@@ -21,13 +21,13 @@ public class DisplayFilesInListView extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.displayfilesinlistview_activity);
-        fileViewer=(ListView)findViewById(R.id.fileViewer);
+        fileViewer=findViewById(R.id.fileViewer);
         final Intent intent=getIntent();
         final String hostname=intent.getStringExtra("HostName");
         final String userName=intent.getStringExtra("UserName");
         final String password=intent.getStringExtra("Password");
-        fileList=new ArrayList<String>();
-        ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(this,R.layout.activity_listview,fileList);
+        fileList=new ArrayList<>();
+        ArrayAdapter<String> arrayAdapter=new ArrayAdapter<>(this,R.layout.activity_listview,fileList);
         fileViewer.setAdapter(arrayAdapter);
         new Thread(new Runnable() {
             @Override
@@ -35,15 +35,19 @@ public class DisplayFilesInListView extends AppCompatActivity {
                 try
                 {
                     mFTPClient=new FTPClient();
+                    //connects to FTPServer
                    mFTPClient.connect(intent.getStringExtra("HostName"));
+                   //Authentication part
                    final boolean status=mFTPClient.login(intent.getStringExtra("UserName"),intent.getStringExtra("Password"));
                    mFTPClient.setFileType(FTP.BINARY_FILE_TYPE);
+                   //FileZilla uses passive mode of communication
                    mFTPClient.enterLocalPassiveMode();
+                   //getting the list of files from FTPServer
                    final FTPFile[] ftpFiles=mFTPClient.listFiles();
-                    //o.setText("1111");
-                    //hrow new Exception();
-                    //Handler handler=new Handler();
-
+                    //main thread is also known as UI Thread
+                    //we cannot update UI other than Main Thread
+                    //so post method will do the job of giving the changes to UI thread i.e Main Thread
+                    //main thread is responsible for handling all the events
                     fileViewer.post(new Runnable() {
                         @Override
                         public void run() {

@@ -20,17 +20,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        host=(EditText)findViewById(R.id.hst);
-        usr=(EditText)findViewById(R.id.usr);
-        pass=(EditText)findViewById(R.id.pass);
-        ok=(Button)findViewById(R.id.k);
-        o=(TextView)findViewById(R.id.out);
+        host=findViewById(R.id.hst);
+        usr=findViewById(R.id.usr);
+        pass=findViewById(R.id.pass);
+        ok=findViewById(R.id.k);
+        o=findViewById(R.id.out);
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try
                 {
+                    //creating an intent to move on to another activity
                     Intent intent=new Intent(v.getContext(),DisplayFilesInListView.class);
+                    //Storing all credentials in intent so this information is also accessible
+                    //in other intent also
                     intent.putExtra("HostName",host.getText().toString());
                     intent.putExtra("UserName",usr.getText().toString());
                     intent.putExtra("Password",pass.getText().toString());
